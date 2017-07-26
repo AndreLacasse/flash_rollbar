@@ -1,37 +1,30 @@
 package com.rollbar.notifier {
 
-    import flash.display.Sprite;
+    import com.laiyonghao.Uuid;
+    import com.rollbar.json.JSONEncoder;
+    import com.rollbar.stacktrace.StackTrace;
+    import com.rollbar.stacktrace.StackTraceParser;
+    
     import flash.display.LoaderInfo;
-
+    import flash.display.Sprite;
     import flash.errors.IllegalOperationError;
-
-    import flash.events.Event;
     import flash.events.ErrorEvent;
+    import flash.events.Event;
     import flash.events.EventDispatcher;
     import flash.events.HTTPStatusEvent;
-    import flash.events.IOErrorEvent;
     import flash.events.IEventDispatcher;
+    import flash.events.IOErrorEvent;
     import flash.events.SecurityErrorEvent;
     import flash.events.UncaughtErrorEvent;
-
     import flash.external.ExternalInterface;
-
     import flash.net.URLLoader;
     import flash.net.URLLoaderDataFormat;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
-
     import flash.system.Capabilities;
     import flash.system.System;
-
     import flash.utils.getTimer;
-    
-    import com.laiyonghao.Uuid;
-
-    import com.rollbar.json.JSONEncoder;
-    import com.rollbar.stacktrace.StackTrace;
-    import com.rollbar.stacktrace.StackTraceParser;
 
     [Event(name="complete", type="flash.events.Event")]
     [Event(name="httpStatus", type="flash.events.HTTPStatusEvent")]
@@ -117,6 +110,13 @@ package com.rollbar.notifier {
 
         public function handleError(err:Error, extraData:Object = null):String {
             var stackTrace:String = err.getStackTrace();
+			
+			if(extraData === null ) {
+				extraData = new Object();
+			}
+			
+			extraData.rawStactkTrace = stackTrace;
+			
             if (stackTrace !== null) {
                 // we got a stack trace (we're in the debug player).
                 return handleStackTrace(stackTrace, extraData);

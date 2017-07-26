@@ -30,7 +30,7 @@ package com.rollbar.stacktrace {
             
             // Grab debug file path if it exists by looking from a '[' to a ':'
             var filePath:String;
-            var debugFilePat:RegExp = /\[(.+):\d+\]/;
+            var debugFilePat:RegExp = /\[([\w\/\.]+):/;
             var debugFilePatMatch:Object = debugFilePat.exec(lineString);
             if (debugFilePatMatch) {
                 filePath = debugFilePatMatch[1];
